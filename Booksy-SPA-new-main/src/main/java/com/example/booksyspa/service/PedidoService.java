@@ -59,7 +59,8 @@ public class PedidoService {
     }
 
     public Pedido getPedidoId(int id) {
-        return pedidoRepository.findById(id).orElse(null);
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El pedido con id " + id + " no existe"));
     }
 
     public List<Pedido> getPedidosPorCliente(int idCliente) {
@@ -107,6 +108,8 @@ public class PedidoService {
 
     @Transactional
     public void deletePedido(int id) {
+        pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El pedido con id " + id + " no existe"));
         pedidoRepository.deleteById(id);
     }
 }

@@ -21,11 +21,13 @@ public class UsuarioService {
     }
 
     public Usuario getUsuarioById(int id) {
-        return usuarioRepository.findById(id).orElse(null);
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario con id " + id + " no existe"));
     }
 
     public Usuario getUsuarioByEmail(String email) {
-        return usuarioRepository.findByEmail(email).orElse(null);
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario con email " + email + " no existe"));
     }
 
     public Usuario saveUsuario(Usuario usuario) {
@@ -50,6 +52,8 @@ public class UsuarioService {
 
     @Transactional
     public void deleteUsuario(int id) {
+        usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario con id " + id + " no existe"));
         usuarioRepository.deleteById(id);
     }
 }

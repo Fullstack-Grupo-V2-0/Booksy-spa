@@ -33,8 +33,7 @@ public class CategoriaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Categoria> getCategoriaById(@PathVariable int id) {
-        Categoria categoria = categoriaService.getCategoriaId(id);
-        return categoria != null ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(categoriaService.getCategoriaId(id));
     }
 
     @PostMapping
@@ -44,22 +43,14 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategoria(@PathVariable int id, @RequestBody Categoria categoria) {
-        try {
-            Categoria categoriaActualizada = categoriaService.updateCategoria(id, categoria);
-            return ResponseEntity.ok(categoriaActualizada);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<Categoria> updateCategoria(@PathVariable int id, @RequestBody Categoria categoria) {
+        Categoria categoriaActualizada = categoriaService.updateCategoria(id, categoria);
+        return ResponseEntity.ok(categoriaActualizada);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoria(@PathVariable int id) {
-        try {
-            categoriaService.deleteCategoria(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        categoriaService.deleteCategoria(id);
+        return ResponseEntity.noContent().build();
     }
 }

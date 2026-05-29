@@ -29,11 +29,13 @@ public class ClienteService {
     }
 
     public Cliente getClienteId(int id) {
-        return clienteRepository.findById(id).orElse(null);
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El cliente con id " + id + " no existe"));
     }
 
     public Cliente getClientePorRut(String rut) {
-        return clienteRepository.findByRut(rut).orElse(null);
+        return clienteRepository.findByRut(rut)
+                .orElseThrow(() -> new RuntimeException("El cliente con rut " + rut + " no existe"));
     }
 
     @Transactional
@@ -60,6 +62,8 @@ public class ClienteService {
 
     @Transactional
     public void deleteCliente(int id) {
+        clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El cliente con id " + id + " no existe"));
         clienteRepository.deleteById(id);
     }
 }

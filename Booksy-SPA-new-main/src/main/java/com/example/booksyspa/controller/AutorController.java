@@ -33,8 +33,7 @@ public class AutorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Autor> getAutorById(@PathVariable int id) {
-        Autor autor = autorService.buscarAutorPorId(id);
-        return autor != null ? ResponseEntity.ok(autor) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(autorService.buscarAutorPorId(id));
     }
 
     @PostMapping
@@ -44,22 +43,14 @@ public class AutorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateAutor(@PathVariable int id, @RequestBody Autor autor) {
-        try {
-            Autor autorActualizado = autorService.actualizar(id, autor);
-            return ResponseEntity.ok(autorActualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<Autor> updateAutor(@PathVariable int id, @RequestBody Autor autor) {
+        Autor autorActualizado = autorService.actualizar(id, autor);
+        return ResponseEntity.ok(autorActualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAutor(@PathVariable int id) {
-        try {
-            autorService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        autorService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

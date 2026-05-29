@@ -21,7 +21,7 @@ import com.example.booksyspa.service.PedidoService;
 
 @RestController
 @RequestMapping("/api/v2/pedidos")
-@CrossOrigin("*") // Permite peticiones desde cualquier origen (útil para desarrollo con SPA)
+@CrossOrigin("*")
 public class PedidoController {
 
     @Autowired
@@ -34,46 +34,26 @@ public class PedidoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Pedido> getPedidoById(@PathVariable int id) {
-        Pedido pedido = pedidoService.getPedidoId(id);
-        if (pedido != null) {
-            return ResponseEntity.ok(pedido);
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(pedidoService.getPedidoId(id));
     }
 
     @PostMapping
-    public ResponseEntity<?> createPedido(@RequestBody Pedido pedido) {
-        try {
-            Pedido nuevoPedido = pedidoService.savePedido(pedido);
-            return new ResponseEntity<>(nuevoPedido, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            // Si el servicio lanza una excepción (ej: cliente o libro no existe), devolvemos un error 400.
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Pedido> createPedido(@RequestBody Pedido pedido) {
+        Pedido nuevoPedido = pedidoService.savePedido(pedido);
+        return new ResponseEntity<>(nuevoPedido, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePedido(@PathVariable int id, @RequestBody Pedido pedido) {
-        try {
-            Pedido pedidoActualizado = pedidoService.updatePedido(id, pedido);
-            return ResponseEntity.ok(pedidoActualizado);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<Pedido> updatePedido(@PathVariable int id, @RequestBody Pedido pedido) {
+        Pedido pedidoActualizado = pedidoService.updatePedido(id, pedido);
+        return ResponseEntity.ok(pedidoActualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePedido(@PathVariable int id) {
-        try {
-            pedidoService.deletePedido(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            // Si el pedido no existe, el delete puede fallar.
-            return ResponseEntity.notFound().build();
-        }
+        pedidoService.deletePedido(id);
+        return ResponseEntity.noContent().build();
     }
-
-    // Endpoints de búsqueda
 
     @GetMapping("/cliente/{idCliente}")
     public ResponseEntity<List<Pedido>> getPedidosByCliente(@PathVariable int idCliente) {

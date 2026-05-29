@@ -33,46 +33,29 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> getClienteById(@PathVariable int id) {
-        Cliente cliente = clienteService.getClienteId(id);
-        return cliente != null ? ResponseEntity.ok(cliente) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(clienteService.getClienteId(id));
     }
 
     @GetMapping("/rut/{rut}")
     public ResponseEntity<Cliente> getClienteByRut(@PathVariable String rut) {
-        Cliente cliente = clienteService.getClientePorRut(rut);
-        return cliente != null ? ResponseEntity.ok(cliente) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(clienteService.getClientePorRut(rut));
     }
 
     @PostMapping
-    public ResponseEntity<?> createCliente(@RequestBody Cliente cliente) {
-        try {
-            Cliente nuevoCliente = clienteService.saveCliente(cliente);
-            return new ResponseEntity<>(nuevoCliente, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Cliente> createCliente(@RequestBody Cliente cliente) {
+        Cliente nuevoCliente = clienteService.saveCliente(cliente);
+        return new ResponseEntity<>(nuevoCliente, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCliente(@PathVariable int id, @RequestBody Cliente cliente) {
-        try {
-            Cliente clienteActualizado = clienteService.updateCliente(id, cliente);
-            return ResponseEntity.ok(clienteActualizado);
-        } catch (RuntimeException e) {
-            if (e.getMessage().contains("no existe")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            }
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Cliente> updateCliente(@PathVariable int id, @RequestBody Cliente cliente) {
+        Cliente clienteActualizado = clienteService.updateCliente(id, cliente);
+        return ResponseEntity.ok(clienteActualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCliente(@PathVariable int id) {
-        try {
-            clienteService.deleteCliente(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        clienteService.deleteCliente(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -53,11 +53,13 @@ public class LibroService {
     }
 
     public Libro getLibroId(int id) {
-        return libroRepository.findById(id).orElse(null);
+        return libroRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El libro con id " + id + " no existe"));
     }
 
     public Libro getLibroPorIsbn(String isbn) {
-        return libroRepository.findByIsbn(isbn).orElse(null);
+        return libroRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new RuntimeException("El libro con ISBN " + isbn + " no existe"));
     }
 
     public List<Libro> getLibrosPorCategoria(int idCategoria) {
@@ -106,6 +108,8 @@ public class LibroService {
     }
 
     public void deleteLibro(int id) {
+        libroRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El libro con id " + id + " no existe"));
         libroRepository.deleteById(id);
     }
 }

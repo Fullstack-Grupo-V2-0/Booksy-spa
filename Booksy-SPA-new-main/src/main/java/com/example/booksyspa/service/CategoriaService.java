@@ -25,7 +25,8 @@ public class CategoriaService {
     }
 
     public Categoria getCategoriaId(int id) {
-        return categoriaRepository.findById(id).orElse(null);
+        return categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("La categoría con id " + id + " no existe"));
     }
 
     @Transactional
@@ -42,9 +43,8 @@ public class CategoriaService {
 
     @Transactional
     public void deleteCategoria(int id) {
-        // Si la categoría no existe, el repositorio lanzará una excepción.
-        // Si una categoría está en uso por un libro, la base de datos debería impedir el borrado
-        // debido a la restricción de clave foránea.
+        categoriaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("La categoría con id " + id + " no existe"));
         categoriaRepository.deleteById(id);
     }
 }

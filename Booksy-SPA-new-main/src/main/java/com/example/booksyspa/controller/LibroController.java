@@ -33,50 +33,30 @@ public class LibroController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Libro> getLibroById(@PathVariable int id) {
-        Libro libro = libroService.getLibroId(id);
-        return libro != null ? ResponseEntity.ok(libro) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(libroService.getLibroId(id));
     }
 
     @PostMapping
-    public ResponseEntity<?> createLibro(@RequestBody Libro libro) {
-        try {
-            Libro nuevoLibro = libroService.saveLibro(libro);
-            return new ResponseEntity<>(nuevoLibro, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Libro> createLibro(@RequestBody Libro libro) {
+        Libro nuevoLibro = libroService.saveLibro(libro);
+        return new ResponseEntity<>(nuevoLibro, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateLibro(@PathVariable int id, @RequestBody Libro libro) {
-        try {
-            Libro libroActualizado = libroService.updateLibro(id, libro);
-            return ResponseEntity.ok(libroActualizado);
-        } catch (RuntimeException e) {
-            // Puede ser un 404 (no encontrado) o 400 (datos inválidos como ISBN duplicado)
-            if (e.getMessage().contains("no existe")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            }
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Libro> updateLibro(@PathVariable int id, @RequestBody Libro libro) {
+        Libro libroActualizado = libroService.updateLibro(id, libro);
+        return ResponseEntity.ok(libroActualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteLibro(@PathVariable int id) {
-        try {
-            libroService.deleteLibro(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        libroService.deleteLibro(id);
+        return ResponseEntity.noContent().build();
     }
-
-    // Endpoints de búsqueda
 
     @GetMapping("/isbn/{isbn}")
     public ResponseEntity<Libro> getLibroByIsbn(@PathVariable String isbn) {
-        Libro libro = libroService.getLibroPorIsbn(isbn);
-        return libro != null ? ResponseEntity.ok(libro) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(libroService.getLibroPorIsbn(isbn));
     }
 
     @GetMapping("/categoria/{idCategoria}")

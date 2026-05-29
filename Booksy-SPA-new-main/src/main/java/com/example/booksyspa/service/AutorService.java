@@ -20,7 +20,8 @@ public class AutorService {
     }
 
     public Autor buscarAutorPorId(int id) {
-        return autorRepository.findById(id).orElse(null);
+        return autorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El autor con id " + id + " no existe"));
     }
 
     public Autor buscarAutorPorNombre(String nombre) {
@@ -51,7 +52,8 @@ public class AutorService {
 
     @Transactional
     public void eliminar(int id) {
-        // Lanza una excepción si el autor no existe, lo cual es manejado por el repositorio.
+        autorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("El autor con id " + id + " no existe"));
         autorRepository.deleteById(id);
     }
 }

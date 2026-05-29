@@ -1,0 +1,81 @@
+### Obtener todos los clientes
+GET http://localhost:8081/api/v2/clientes
+Accept: application/json
+
+###
+
+### Obtener cliente por ID
+GET http://localhost:8081/api/v2/clientes/1
+Accept: application/json
+
+###
+
+### Obtener cliente por RUT
+GET http://localhost:8081/api/v2/clientes/rut/12345678-9
+Accept: application/json
+
+###
+
+### Crear nuevo cliente
+POST http://localhost:8081/api/v2/clientes
+Content-Type: application/json
+
+{
+  "rut": "12345678-9",
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "juan.perez@email.com",
+  "telefono": "+56912345678"
+}
+
+###
+
+### Actualizar cliente
+PUT http://localhost:8081/api/v2/clientes/1
+Content-Type: application/json
+
+{
+  "rut": "12345678-9",
+  "nombre": "Juan",
+  "apellido": "González",
+  "email": "juan.gonzalez@email.com",
+  "telefono": "+56987654321"
+}
+
+###
+
+### Eliminar cliente
+DELETE http://localhost:8081/api/v2/clientes/1
+
+###
+
+### Crear cliente con RUT duplicado (debe retornar 400)
+POST http://localhost:8081/api/v2/clientes
+Content-Type: application/json
+
+{
+  "rut": "12345678-9",
+  "nombre": "Pedro",
+  "apellido": "López",
+  "email": "pedro.lopez@email.com",
+  "telefono": "+56911111111"
+}
+
+###
+
+### Actualizar cliente inexistente (debe retornar 404)
+PUT http://localhost:8081/api/v2/clientes/9999
+Content-Type: application/json
+
+{
+  "rut": "99999999-9",
+  "nombre": "Inexistente",
+  "apellido": "Inexistente",
+  "email": "no@existe.com",
+  "telefono": "+56900000000"
+}
+
+###
+
+### Eliminar cliente inexistente (debe retornar 404)
+DELETE http://localhost:8081/api/v2/clientes/9999

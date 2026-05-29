@@ -33,43 +33,28 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> getUsuarioById(@PathVariable int id) {
-        Usuario usuario = usuarioService.getUsuarioById(id);
-        return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(usuarioService.getUsuarioById(id));
     }
 
-    // Este endpoint es el que consulta BooksySPA para verificar el usuario conectado
     @GetMapping("/email/{email}")
     public ResponseEntity<Usuario> getUsuarioByEmail(@PathVariable String email) {
-        Usuario usuario = usuarioService.getUsuarioByEmail(email);
-        return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();
+        return ResponseEntity.ok(usuarioService.getUsuarioByEmail(email));
     }
 
     @PostMapping
-    public ResponseEntity<?> createUsuario(@RequestBody Usuario usuario) {
-        try {
-            Usuario nuevo = usuarioService.saveUsuario(usuario);
-            return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
+        Usuario nuevo = usuarioService.saveUsuario(usuario);
+        return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUsuario(@PathVariable int id, @RequestBody Usuario usuario) {
-        try {
-            return ResponseEntity.ok(usuarioService.updateUsuario(id, usuario));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<Usuario> updateUsuario(@PathVariable int id, @RequestBody Usuario usuario) {
+        return ResponseEntity.ok(usuarioService.updateUsuario(id, usuario));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUsuario(@PathVariable int id) {
-        try {
-            usuarioService.deleteUsuario(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+        usuarioService.deleteUsuario(id);
+        return ResponseEntity.noContent().build();
     }
 }
